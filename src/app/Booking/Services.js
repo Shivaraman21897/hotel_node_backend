@@ -38,15 +38,33 @@ class RoutesService {
   async saveBookingServices(data) {
     const methodName = Methods.SAVE_BOOKING;
     Log.MethodEnter(methodName);
+
     try {
+      if (!data.hotelDetailsId || !data.paymentStatus || !data.amount) {
+        throw new Error("Missing required booking details");
+      }
+
       const saveBooking = await Entity.BookingDetails.create({
-        ...data,
+        hotelDetailsId: data.hotelDetailsId,
+        name: data.name || null,
+        emailId: data.emailId || null,
+        phoneNumber: data.phoneNumber || null,
+        paymentStatus: data.paymentStatus,
+        amount: data.amount,
+        usdAmount: data.usdAmount,
       });
+
+      CommonLog.INFO(`Booking saved with ID: ${saveBooking.id}`);
 
       return ResponseHandler.success(methodName, saveBooking);
     } catch (error) {
       CommonLog.ERROR(error);
-      return ResponseHandler.failure(methodName, 'Sorry, something went wrong.');
+      return ResponseHandler.failure(
+        methodName,
+        "Sorry, something went wrong."
+      );
+    } finally {
+      Log.MethodExit(methodName);
     }
   }
 
