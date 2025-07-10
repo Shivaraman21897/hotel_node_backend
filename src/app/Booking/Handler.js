@@ -37,21 +37,25 @@ class BookingHandler {
         }
     }
 
-    async saveBooking(req, res) {
-        const methodName = Methods.SAVE_BOOKING;
-        Log.MethodEnter(methodName);
-        CommonLog.INFO('Received Save Booking');
-        try {
-            const data = postRequestParser(req);
-            const response = await Service.saveBookingServices(data);
-            HttpResponse(res, response);
-        } catch (error) {
-            CommonLog.ERROR(error);
-            HttpResponse(res, ResponseHandler.failure(methodName, error));
-        } finally {
-            Log.MethodExit(methodName);
-        }
+  async saveBooking(req, res) {
+    const methodName = Methods.SAVE_BOOKING;
+    Log.MethodEnter(methodName);
+    CommonLog.INFO("Received Save Booking");
+
+    try {
+      const data = postRequestParser(req);
+      console.log("Parsed Booking Data:", data);
+
+      const response = await Service.saveBookingServices(data);
+
+      HttpResponse(res, response);
+    } catch (error) {
+      CommonLog.ERROR(error);
+      HttpResponse(res, ResponseHandler.failure(methodName, error));
+    } finally {
+      Log.MethodExit(methodName);
     }
+  }
 
     async updateBooking(req, res) {
         const methodName = Methods.UPDATE_BOOKING;
